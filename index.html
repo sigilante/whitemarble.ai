@@ -42,7 +42,9 @@
 
         .logo-section {
             position: relative;
-            overflow: visible; /* Allows logo to extend beyond container */
+            overflow: visible;
+            width: 120px; /* Give it a fixed width for mobile */
+            height: 60px; /* Give it a fixed height for mobile */
         }
 
         .logo-icon {
@@ -50,7 +52,7 @@
             top: 50%;
             left: 0;
             transform: translateY(-50%);
-            height: 99px; /* Or whatever size you want */
+            height: 99px;
             width: auto;
             z-index: 10;
         }
@@ -75,6 +77,16 @@
         .nav-item:hover {
             background: rgba(44, 24, 16, 0.2);
             transform: translateY(-2px);
+        }
+
+        /* Mobile menu button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #2c1810;
+            font-size: 1.5rem;
+            cursor: pointer;
         }
 
         /* Hero Section */
@@ -361,12 +373,29 @@
             color: #666;
         }
 
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* Responsive Design */
         @media (max-width: 1024px) {
+            .nav-container {
+                padding: 0 20px;
+            }
+
             .hero-container {
                 grid-template-columns: 1fr;
                 gap: 40px;
                 text-align: center;
+                padding: 0 20px;
             }
 
             .hero-title {
@@ -380,42 +409,183 @@
             .nav-item {
                 font-size: 1rem;
             }
+
+            .content-section {
+                padding: 80px 20px;
+            }
+
+            .mission-container {
+                padding: 0 20px;
+            }
         }
 
         @media (max-width: 768px) {
+            .header-nav {
+                padding: 15px 0;
+            }
+
+            .nav-container {
+                padding: 0 15px;
+            }
+
+            .logo-section {
+                width: 80px;
+                height: 50px;
+            }
+
+            .logo-icon {
+                height: 70px;
+            }
+
             .nav-items {
                 display: none;
             }
 
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-section {
+                min-height: 90vh;
+                padding: 20px 0;
+            }
+
+            .hero-container {
+                padding: 0 15px;
+                gap: 30px;
+            }
+
             .hero-title {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
+                line-height: 1.2;
+                margin-bottom: 20px;
+                letter-spacing: 1px;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+                margin-bottom: 20px;
+            }
+
+            .hero-visual {
+                height: 400px;
+            }
+
+            .sculpture-image {
+                width: 280px;
+                height: 350px;
+            }
+
+            .glow-circle {
+                width: 320px;
+                height: 320px;
+            }
+
+            .accent-circle {
+                width: 200px;
+                height: 200px;
+            }
+
+            .content-section {
+                padding: 60px 15px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 40px;
             }
 
             .features-grid {
                 grid-template-columns: 1fr;
+                gap: 30px;
+                margin-top: 40px;
+            }
+
+            .feature-card {
+                padding: 30px 20px;
+            }
+
+            .feature-title {
+                font-size: 1.5rem;
+            }
+
+            .feature-description {
+                font-size: 1rem;
+            }
+
+            .mission-section {
+                padding: 60px 0;
+            }
+
+            .mission-container {
+                padding: 0 15px;
+            }
+
+            .mission-text {
+                font-size: 1.1rem;
+                line-height: 1.6;
+            }
+
+            .mission-quote {
+                font-size: 1.4rem;
+                line-height: 1.4;
+            }
+
+            .cta-section {
+                padding: 60px 0;
+            }
+
+            .cta-button {
+                font-size: 1rem;
+                padding: 15px 30px;
+                letter-spacing: 1px;
+            }
+
+            .footer-content {
+                padding: 0 15px;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
             }
 
             .sculpture-image {
-                width: 300px;
-                height: 400px;
+                width: 220px;
+                height: 280px;
             }
 
             .glow-circle {
-                width: 350px;
-                height: 350px;
+                width: 260px;
+                height: 260px;
             }
-        }
 
-        /* Scroll animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
+            .section-title {
+                font-size: 1.6rem;
+            }
 
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
+            .feature-card {
+                padding: 20px 15px;
+            }
+
+            .mission-text {
+                font-size: 1rem;
+            }
+
+            .mission-quote {
+                font-size: 1.2rem;
+            }
+
+            .cta-button {
+                padding: 12px 25px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -431,6 +601,7 @@
                 <a href="#library" class="nav-item">Library<br>Contents</a>
                 <a href="https://portal.whitemarble.ai/apps/privateer" class="nav-item">Log Into<br>Library</a>
             </nav>
+            <button class="mobile-menu-btn">☰</button>
         </div>
     </header>
 
