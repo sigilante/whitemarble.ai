@@ -1,0 +1,58 @@
+<!-- Blog Preview Section - Add this to your main page -->
+<section class="blog-preview" style="margin: 4rem 0; padding: 3rem 0; border-top: 1px solid #dee2e6;">
+    <div class="container" style="max-width: 800px; margin: 0 auto; padding: 0 2rem;">
+        <header class="blog-preview-header" style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="font-size: 2rem; color: #2c3e50; margin-bottom: 0.5rem; font-weight: normal; font-family: Georgia, 'Times New Roman', serif;">Recent Announcements</h2>
+            <p style="color: #6c757d; font-style: italic; font-size: 1.1rem;">Latest updates from the Syndicate Chronicles</p>
+        </header>
+
+        <div class="recent-posts" style="display: grid; gap: 1.5rem;">
+            <!-- Latest Post -->
+            <article class="preview-card" style="background: white; border-radius: 6px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e9ecef; transition: transform 0.3s ease;">
+                <div class="preview-date" style="font-size: 0.85rem; color: #6c757d; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">December 15, 2024</div>
+                <h3 style="font-size: 1.25rem; color: #2c3e50; margin-bottom: 0.75rem; font-weight: normal;">
+                    <a href="blog/posts/llama-white-marble-v2.html" style="color: inherit; text-decoration: none; transition: color 0.3s ease;" onmouseover="this.style.color='#495057'" onmouseout="this.style.color='#2c3e50'">Llama White Marble v2.0 Released</a>
+                </h3>
+                <p style="color: #495057; line-height: 1.6; font-size: 0.95rem;">Enhanced contextual understanding of classical texts with improved accuracy in historical references. Includes expanded Byzantine sources and medieval commentaries.</p>
+                <div style="margin-top: 1rem;">
+                    <span style="background: #e9ecef; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #6c757d;">Model Updates</span>
+                </div>
+            </article>
+
+            <!-- Second Post -->
+            <article class="preview-card" style="background: white; border-radius: 6px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e9ecef; transition: transform 0.3s ease;">
+                <div class="preview-date" style="font-size: 0.85rem; color: #6c757d; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">November 28, 2024</div>
+                <h3 style="font-size: 1.25rem; color: #2c3e50; margin-bottom: 0.75rem; font-weight: normal;">
+                    <a href="blog/posts/new-papyrus-collection.html" style="color: inherit; text-decoration: none; transition: color 0.3s ease;" onmouseover="this.style.color='#495057'" onmouseout="this.style.color='#2c3e50'">New Papyrus Collection Added</a>
+                </h3>
+                <p style="color: #495057; line-height: 1.6; font-size: 0.95rem;">Recently digitized papyri from Oxyrhynchus collection enriches our library with 1st-4th century CE fragments providing new insights into Greco-Roman Egypt.</p>
+                <div style="margin-top: 1rem;">
+                    <span style="background: #e9ecef; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #6c757d;">Library Updates</span>
+                </div>
+            </article>
+        </div>
+
+        <div class="blog-preview-footer" style="text-align: center; margin-top: 2rem;">
+            <a href="blog/" style="color: #495057; text-decoration: none; font-size: 1rem; padding: 0.75rem 1.5rem; border: 1px solid #dee2e6; border-radius: 4px; transition: all 0.3s ease; display: inline-block; font-family: Georgia, 'Times New Roman', serif;" onmouseover="this.style.background='#495057'; this.style.color='white'; this.style.borderColor='#495057'" onmouseout="this.style.background='transparent'; this.style.color='#495057'; this.style.borderColor='#dee2e6'">
+                View All Chronicles →
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .preview-card:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+    }
+
+    @media (max-width: 768px) {
+        .blog-preview .container {
+            padding: 0 1rem;
+        }
+        
+        .preview-card {
+            padding: 1.25rem !important;
+        }
+    }
+</style>
