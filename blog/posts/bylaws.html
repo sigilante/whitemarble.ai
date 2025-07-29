@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bylaws - White Marble Syndicate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .site-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            color: #1a252f;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .site-subtitle {
+            font-size: 1.1rem;
+            color: #6c757d;
+            font-style: italic;
+            letter-spacing: 0.05em;
+        }
+
+        .post-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #dee2e6;
+            margin-bottom: 2rem;
+        }
+
+        .post-date {
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .post-title {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: normal;
+        }
+
+        .post-meta {
+            text-align: center;
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .post-category {
+            background: #e9ecef;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-block;
+        }
+
+        .post-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #dee2e6;
+            margin-bottom: 2rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.5rem;
+            color: #495057;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .post-content ol,
+        .post-content ul {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.5rem;
+            color: #495057;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .post-content a {
+            color: #495057;
+            text-decoration: underline;
+            transition: color 0.3s ease;
+        }
+
+        .post-content a:hover {
+            color: #2c3e50;
+        }
+
+        .post-content em {
+            font-style: italic;
+            color: #6c757d;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: #495057;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .nav-link:hover {
+            background: #495057;
+            color: white;
+            border-color: #495057;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .site-title {
+                font-size: 2rem;
+            }
+
+            .post-title {
+                font-size: 1.8rem;
+            }
+
+            .post-header,
+            .post-content {
+                padding: 1.5rem;
+            }
+
+            .navigation {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1 class="site-title">White Marble Syndicate</h1>
+        </header>
+
+        <article>
+            <div class="post-header">
+                <div class="post-date">August 29, 2025</div>
+                <h1 class="post-title">DAO Bylaws</h1>
+                <div class="post-meta">
+                    <span class="post-category">Announcements</span>
+                </div>
+            </div>
+
+            <div class="post-content">
+                <h1>White Marble Syndicate Bylaws</h1>
+                <h2>Version ~2025.7.29</h2>
+                <p>White Marble Syndicate is a not-for-profit decentralized autonomous organization for the
+                    acquisition, preservation, and utilization of Western classical scholarship. As a library DAO,
+                    White Marble Syndicate is dedicated to preserving and curating the timeless wisdom of the
+                    classical Western tradition, rooted in the Greek and Latin corpus. Our shared belief is that the
+                    fragile thread of ancient knowledge—encompassing philosophy, literature, history, and art—holds
+                    profound value for humanity’s understanding of itself and its future. We are committed to
+                    building a pristine, member-governed repository of primary texts, translations, scholarly
+                    commentary, and AI-enhanced tools to empower private research and intellectual exploration.</p>
+                <p>Our goal is to create a living, evolving library that not only safeguards the classical heritage
+                    but also makes it accessible and actionable for our members through research tools and
+                    cutting-edge AI technologies. We uphold the values of intellectual rigor, collaborative
+                    stewardship, and privacy, ensuring that our community of scholars, researchers, and enthusiasts
+                    can engage deeply with the classical world in a secure and enriching environment. As a
+                    syndicate, we foster a self-organizing collective where members actively shape the library’s
+                    growth, governance, and innovation, preserving this cultural legacy for generations to come.</p>
+                <p>The WMS library mandate is defined as:</p>
+                <ul>
+                    <li>The classical heritage of Greek and Roman thought.</li>
+                    <li>Received associated commentary (as on Aristotle).</li>
+                    <li>Ancient antecedents (as Linear B or Etruscan).</li>
+                    <li>Relevant scholarship (as treatises, forewords, etc.).</li>
+                </ul>
+                <h2>Governance &amp; Membership</h2>
+                <ul>
+                    <li>GM1: White Marble Syndicate membership consists of token holders of one or more
+                        <code>$WHTMRBL</code> tokens as issued by Ethereum contract
+                        <code>0xbC7e36265f8f20F8113729393eC2e824235BAb7B</code>.
+                    </li>
+                    <li>GM2: Each complete token entitles its holder to one vote.</li>
+                    <li>GM3: Voting takes place off-chain via an application set up for each vote on the syndicate's
+                        primary Urbit Azimuth point or a designated alternative platform approved by the board in
+                        case of technical unavailability.</li>
+                    <li>GM4: A quorum for voting consists of the lesser of 20% of currently issued tokens or 100
+                        tokens, adjustable by member vote to ensure scalability.</li>
+                    <li>GM5: Any member may bring a motion for a vote before the syndicate with the support of 5% of
+                        currently issued tokens.</li>
+                    <li>GM6: A proposal for voting has an associated time span between two weeks and 90 days.
+                        Membership tokens acquired during the voting period may not be used in the current election
+                        but are eligible for future votes. The quorum is set by the circulating supply of $WHTMRBL
+                        at the proposal's starting timestamp.</li>
+                    <li>GM7: The board is empowered to pursue appropriate legal organization (e.g. DUNA) consistent
+                        with the unwrapped DAO's nonprofit status at any time.</li>
+                    <li>GM8: The board is not empowered to seek venture capital or large-scale investment; growth
+                        should be via regular utility token sales for membership.</li>
+                    <li>GM9: The board may accept grants, donations, or sponsorships from entities aligned with
+                        WMS’s nonprofit mission, subject to member approval via a majority vote with quorum.</li>
+                    <li>GM10: The Members-at-Large shall maintain onboarding materials on governance, tokens, and
+                        platform access.</li>
+                    <li>GM11: The administrators serving as Librarian and Treasurer serve on the board.</li>
+                </ul>
+                <h2>Asset Management</h2>
+                <ul>
+                    <li>AM1: White Marble Syndicate collectively owns assets related to the syndicate's mission.
+                        These are listed for the current time in the bylaws appendix A.</li>
+                    <li>AM2: Library assets are administered by the Librarian and Technologist.</li>
+                    <li>AM3: Treasury assets are administered by the Treasurer. Due to technological limitations,
+                        incoming fees are accepted at a personal Ethereum address. These are carefully accounted for
+                        and moved to a multisig wallet for the general treasury. All incoming fees must be directed
+                        to a multisig wallet within 60 days of receipt, with transparent accounting maintained by
+                        the Treasurer.</li>
+                    <li>AM4: A multisig wallet requiring (int(n/2)+1)-of-n board votes to disburse funds is required. All fund
+                        disbursements should have an associated invoice maintained by the Treasurer.</li>
+                    <li>AM5: The Technologist has primary responsibility for the website, forum, library interface,
+                        and tooling interfaces and infrastructure. Syndicate members may be delegated access to
+                        these resources as appropriate.</li>
+                    <li>AM6: The board governs $WHTMRBL issuance, aiming to maintain a stable valuation (e.g.,
+                        approximately $100 USDC) through responsible issuance and reserve management, subject to
+                        member approval for significant changes.</li>
+                    <li>AM7: The Treasurer and board produce an annual stewardship report of White Marble Syndicate
+                        finances, assets, and tokenomics.</li>
+                    <li>AM8: The Treasurer and board may commission an independent audit of treasury assets and
+                        tokenomics, with results published to the membership.</li>
+                </ul>
+                <h2>Administrator Roles</h2>
+                <ul>
+                    <li>R1: Community administrators practically coordinate the activities of the syndicate as a
+                        service. They are distinct from the board, although board members may serve as
+                        administrators.</li>
+                    <li>R2: Several roles may be held concurrently by one individual, but there must be at least
+                        three signators for the DAO public keys. Some positions, like Technologist or Treasurer, may
+                        also have multiple individual members serving as long as one remains the chief of that role.
+                    </li>
+                    <li>R3: The roles include:<ul>
+                            <li><strong>Librarian</strong>. Responsible for curation and operation of the library,
+                                including acquisitions of scholarship and preparation of new materials. Effectively
+                                the executive role.</li>
+                            <li><strong>Treasurer</strong>. Responsible for receiving, managing, and reporting on
+                                community funds and expenses, including legal responsibilities like filing fees and
+                                taxes.</li>
+                            <li><strong>Member-at-Large</strong>. Responsible for community concerns and membership
+                                scope, including experience, recruitment, and outreach.</li>
+                            <li><strong>Technologist</strong>. Responsible for platform operations, including IT
+                                infrastructure, AI tooling, and software tooling.</li>
+                        </ul>
+                    </li>
+                    <li>R4: In case of a vacancy or temporary absence in a role, the board may appoint an interim
+                        replacement by majority vote, pending a member election within 60 days to fill the role
+                        permanently.</li>
+                    <li>R5: Role holders must disclose any conflicts of interest (e.g., financial or personal ties
+                        to proposed acquisitions or vendors) to the board and membership. Decisions involving
+                        conflicts require approval by a majority vote of non-conflicted members.</li>
+                    <li>R6: Role holders serve on a volunteer basis unless compensation is approved by a majority
+                        vote with quorum, disclosed in the annual stewardship report.</li>
+                </ul>
+                <h2>Code of Conduct</h2>
+                <ul>
+                    <li>CC1: Our community is built on mutual respect, intellectual rigor, and a shared commitment
+                        to preserving and engaging with the classical heritage. These guidelines outline the
+                        expected behavior for all participants, the scope of our social channels, the types of
+                        violations to be prevented, the process for addressing violations, and the associated
+                        sanctions.</li>
+                    <li>CC2: These guidelines apply to all official WMS community platforms, including:<ul>
+                            <li>White Marble Syndicate Website: The primary hub for accessing the library and member
+                                resources.</li>
+                            <li>WMS Community Forum: The dedicated private space for member discussions, support,
+                                and governance proposals.</li>
+                            <li>@WhiteMarbleDAO on X: The official X account for announcements, updates, and
+                                community engagement.</li>
+                            <li>Future Platforms: Any additional platforms or tools (e.g., readers, AI-assisted
+                                commentary tools, member dashboards) introduced as part of WMS’s roadmap.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>Expected Behavior</h3>
+                <ul>
+                    <li>CC3: Members of the WMS community are expected to:<ul>
+                            <li>Engage respectfully and constructively, fostering an environment of intellectual
+                                curiosity and collaboration.</li>
+                            <li>Contribute to the collective mission of curating, preserving, and advancing
+                                classical texts and scholarship.</li>
+                            <li>Respect the privacy and intellectual property of the community, including
+                                proprietary resources and member-only data.</li>
+                            <li>Provide thoughtful input on library acquisitions, governance, and AI tool
+                                development through designated channels.</li>
+                            <li>Adhere to the syndicate’s values of intellectual rigor, privacy, and stewardship of
+                                the classical Western tradition.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>Types of Violations</h3>
+                <ul>
+                    <li>CC4: The following behaviors are considered violations of WMS community standards:<ol>
+                            <li>Disrespectful or Harassing Behavior: Personal attacks, derogatory language, or
+                                harassment. Be professional.</li>
+                            <li>Misuse of Resources: Unauthorized sharing, distribution, or reproduction of WMS
+                                library materials, including texts, translations, or AI-generated outputs, outside
+                                the private membership.</li>
+                            <li>Spam or Off-Topic Content: Posting irrelevant, promotional, or disruptive content in
+                                community channels that detracts from the focus on classical studies.</li>
+                            <li>Malicious Actions: Attempts to undermine the security, integrity, or functionality
+                                of WMS platforms, including hacking, data breaches, or misuse of AI tools.</li>
+                            <li>Non-Compliance with Governance: Acting against agreed-upon syndicate governance
+                                rules, such as disregarding member voting outcomes or misrepresenting proposals.
+                            </li>
+                            <li>Plagiarism or Misattribution: Submitting or sharing content (e.g., library
+                                nominations or commentary) without proper attribution or claiming others’ work as
+                                one’s own.</li>
+                        </ol>
+                    </li>
+                </ul>
+                <h3>Judging Violations</h3>
+                <ul>
+                    <li>CC5: Violations will be assessed through a transparent and fair process:<ol>
+                            <li>Reporting: Members can report suspected violations via the WMS community forum, by
+                                direct message to the owned Urbit star, or by report to the Member-at-Large who
+                                represents the community. Reports should include specific details (e.g.,
+                                screenshots, timestamps, or links).</li>
+                            <li>Review Process: A designated governance committee, elected by WMS members as part of
+                                the syndicate’s evolving governance structure, will review reports. The committee
+                                will evaluate evidence, context, and intent, ensuring alignment with the WMS vision
+                                and values.</li>
+                            <li>Member Input: For complex or controversial cases, the committee may solicit input
+                                from the broader membership through a secure voting mechanism to ensure community
+                                consensus.</li>
+                            <li>Timeliness: Reviews will aim to be completed within 7 days of a report, with updates
+                                provided to the reporting member and the accused.</li>
+                        </ol>
+                    </li>
+                </ul>
+                <h3>Sanctions for Violations</h3>
+                <ul>
+                    <li>CC6: Sanctions will be proportionate to the severity and frequency of the violation, as
+                        determined by the governance committee. Possible sanctions include:<ol>
+                            <li>Warning: A formal notice for minor or first-time violations, with guidance on
+                                expected behavior.</li>
+                            <li>Temporary Suspension: Temporary restriction from community platforms (e.g., forum or
+                                X interactions) for 7–30 days for moderate or repeated violations.</li>
+                            <li>Access Restriction: Limited access to certain WMS resources (e.g., AI tools or
+                                library sections) for serious violations, such as misuse of proprietary materials.
+                            </li>
+                            <li>Membership Revocation: Permanent removal from the WMS community for egregious or
+                                repeated violations, such as malicious actions or significant breaches of privacy.
+                                Revoked members forfeit access to the library and any associated benefits.</li>
+                        </ol>
+                    </li>
+                </ul>
+                <h3>Appeals Process</h3>
+                <ul>
+                    <li>CC7: Members sanctioned for violations may appeal within 14 days by submitting a written
+                        statement to the governance committee via the WMS community forum. Appeals will be reviewed
+                        by a separate subset of the committee to ensure impartiality, with a decision rendered
+                        within 14 days.</li>
+                    <li>CC8: Disputes not covered by the Code of Conduct shall be resolved through mediation by the
+                        Member-at-Large, followed by a binding member vote with quorum if unresolved.</li>
+                </ul>
+                <h3>Commitment to Fairness</h3>
+                <ul>
+                    <li>CC9: The WMS community is a collaborative syndicate, and these guidelines are designed to
+                        protect its mission and members. As the governance structure evolves, members will have
+                        opportunities to propose amendments to these guidelines through the community forum to
+                        ensure they reflect the collective’s values and needs.</li>
+                    <li>CC10: By participating in the White Marble Syndicate, members agree to uphold these
+                        guidelines and contribute to a respectful, intellectually vibrant community dedicated to the
+                        classical Western tradition. For updates or questions, follow @WhiteMarbleDAO or check the
+                        WMS website.</li>
+                </ul>
+                <h2>Risk Management</h2>
+                <ul>
+                    <li>RM1: The board shall annually assess technological, legal, and financial risks to WMS
+                        operations, developing contingency plans to ensure continuity of the library and member
+                        access.</li>
+                </ul>
+                <h2>Amendments</h2>
+                <ul>
+                    <li>A1: Bylaws may be updated by a two-thirds majority vote with quorum.</li>
+                </ul>
+                <h2>Dissolution</h2>
+                <ul>
+                    <li>D1: In the event of WMS dissolution, assets shall be transferred to a nonprofit entity with
+                        a similar mission, as determined by a two-thirds member vote with quorum.</li>
+                    <li>D2: Dissolution may be triggered by failure of the board to maintain legal and regulatory
+                        responsibilities and failure of the group membership to reach quorum on appointment of a new
+                        board.</li>
+                </ul>
+                <h2>Terminology &amp; Definitions</h2>
+                <ul>
+                    <li>TD1: “Quorum” is the minimum $WHTMRBL tokens required for valid voting.</li>
+                    <li>TD2: “Multisig wallet” requires multiple board signatures for transactions. </li>
+                    <li>TD3: “Urbit Azimuth point” is WMS's primary Urbit identity for secure voting/communication.
+                    </li>
+                </ul>
+                <h2>Appendix A: Assets</h2>
+                <ul>
+                    <li>
+                        <p>AA1: Library texts and AI-generated outputs are owned collectively by WMS and licensed
+                            for use under terms approved by the board, ensuring alignment with nonprofit goals.</p>
+                    </li>
+                    <li>
+                        <p>AA2: Asset sale or transfer requires a majority vote with quorum.</p>
+                    </li>
+                    <li>
+                        <p>The <a href="https://whitemarble.ai">https://whitemarble.ai</a> website and the
+                            associated hosting materials.</p>
+                    </li>
+                    <li>
+                        <p>The @WhiteMarbleDAO account on X.</p>
+                    </li>
+                    <li>
+                        <p>The WhiteMarbleDAO organization and repositories on GitHub.</p>
+                    </li>
+                    <li>
+                        <p>The White Marble Syndicate forum and its successors.</p>
+                    </li>
+                    <li>
+                        <p>The White Marble Syndicate library (meaning acquired and contributed texts) in its
+                            evolution.</p>
+                    </li>
+                    <li>
+                        <p>The Urbit star ~pondeg.</p>
+                    </li>
+                    <li>
+                        <p>The joint non-profit treasury (e.g. as raised from service provision, utility token
+                            sales, etc.).</p>
+                    </li>
+                    <li>
+                        <p>One or more multisig wallets controlled by the board for the DAO treasury.</p>
+                    </li>
+                    <li>
+                        <p>Funds received in the course of business by the Treasurer in exchange for $WHTMRBL
+                            tokens.</p>
+                    </li>
+                </ul>
+                <h2>Appendix B: Current Roles</h2>
+                <p>The token holders currently associated with each adminstrator role are:</p>
+                <ul>
+                    <li>Librarian:
+                        <code>sigilante.eth</code>/<code>0x6f9bd1383d2eB2a0BfF699F5500d24f1b17E4D35</code>
+                    </li>
+                    <li>Treasurer:
+                        <code>sigilante.eth</code>/<code>0x6f9bd1383d2eB2a0BfF699F5500d24f1b17E4D35</code>; Stuart
+                    </li>
+                    <li>Member-at-Large: Stuart</li>
+                    <li>Technologist:
+                        <code>hanfel.eth</code>/<code>0x5bfD89dE4Ea71f26449FE3De671322820D40de85</code>
+                    </li>
+                </ul>
+                <p>The token holders currently serving as the board of the DAO are:</p>
+                <ul>
+                    <li><code>sigilante.eth</code>/<code>0x6f9bd1383d2eB2a0BfF699F5500d24f1b17E4D35</code></li>
+                    <li><code>hanfel.eth</code>/<code>0x5bfD89dE4Ea71f26449FE3De671322820D40de85</code></li>
+                    <li>Stuart</li>
+                    <li>minder?</li>
+                    <li>roptyp?</li>
+                </ul>
+            </div>
+        </article>
+
+        <nav class="navigation">
+            <a href="../" class="nav-link">← Back to Chronicles</a>
+            <a href="../../" class="nav-link">← Return to Main Site</a>
+        </nav>
+    </div>
+</body>
+
+</html>
