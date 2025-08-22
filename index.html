@@ -734,6 +734,58 @@
             font-size: 0.95rem;
             white-space: pre-wrap;
         }
+
+        .error {
+            background: rgba(220, 53, 69, 0.06);
+            border-color: #dc3545;
+            color: #ffc1c1;
+        }
+
+        .success {
+            background: rgba(40, 167, 69, 0.06);
+            border-color: #28a745;
+            color: #c1ffc1;
+        }
+
+        .debug-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .debug-info::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .debug-info::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .debug-info::-webkit-scrollbar-thumb {
+            background: rgba(78, 205, 196, 0.3);
+            border-radius: 4px;
+        }
+
+        .debug-info::-webkit-scrollbar-thumb:hover {
+            background: rgba(78, 205, 196, 0.5);
+        }
+
+        .debug-entry {
+            margin-bottom: 5px;
+            padding: 2px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .debug-entry:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
 
@@ -822,7 +874,7 @@
         <div class="purchase-card fade-in visible">
             <div style="display:flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
                 <p class="feature-description">A $WHTMRBL token is necessary to participate in the White Marble
-                    Syndicate DAO. <br/> This includes voting rights and other privileges.</p>
+                    Syndicate DAO. <br /> This includes voting rights and other privileges.</p>
                 <div>
                     <div class="purchase-label">Price</div>
                     <div style="font-size:1.6rem; color:#4ecdc4;">100 USDC per token</div>
@@ -1093,19 +1145,29 @@
 
         const status = (msg, type = 'info') => {
             const s = $('status');
-            s.style.display = 'none';  // XXX change to block if debugging
+            // Only show status messages for errors and success
+            if (type === 'error' || type === 'success') {
+                s.style.display = 'block';
+            } else {
+                s.style.display = 'none';  // Hide info messages during normal flow
+            }
             s.textContent = msg;
             s.className = 'status';
             if (type === 'error') s.classList.add('error');
             if (type === 'success') s.classList.add('success');
         };
 
-        const debug = (msg) => {
+        const debug = (msg, showToUser = false) => {
             const debugInfo = $('debugInfo');
             const debugContent = $('debugContent');
-            debugInfo.style.display = 'none';  // XXX change to block if debugging
+
+            // Only show debug panel to user when explicitly requested (errors)
+            if (showToUser) {
+                debugInfo.style.display = 'block';
+            }
+
             debugContent.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + msg + '</div>';
-            console.log('DEBUG:', msg);
+            console.log('DEBUG:', msg);  // Always log to console for developers
         };
 
         const short = (addr) => addr ? addr.slice(0, 6) + '…' + addr.slice(-4) : 'N/A';
@@ -1127,7 +1189,7 @@
             debug('Checking for MetaMask/Web3 provider...');
             if (!window.ethereum) {
                 status('No wallet found. Please install MetaMask.', 'error');
-                debug('No window.ethereum found');
+                debug('No window.ethereum found', true);  // Show debug on error
                 return false;
             }
             debug('Web3 provider found: ' + (window.ethereum.isMetaMask ? 'MetaMask' : 'Other'));
@@ -1159,7 +1221,7 @@
                 if (EXPECTED_CHAIN_ID && chainId !== Number(EXPECTED_CHAIN_ID)) {
                     showSwitchButton(EXPECTED_CHAIN_ID);
                     status(`Connected to chain ${chainId}. Please switch to ${EXPECTED_CHAIN_ID}.`, 'error');
-                    debug('Wrong network detected');
+                    debug('Wrong network detected', true);  // Show debug on error
                 } else {
                     $('switchBtn').style.display = 'none';
                     status(`Connected: ${short(userAddress)} on chain ${chainId}`, 'success');
@@ -1172,12 +1234,12 @@
                     usdcDecimals = await usdc.decimals();
                     debug('USDC decimals: ' + usdcDecimals);
                 } catch (e) {
-                    debug('Could not read USDC decimals; defaulting to 6. Error: ' + e.message);
+                    debug('Could not read USDC decimals; defaulting to 6. Error: ' + e.message, true);  // Show debug on error
                     console.warn('Could not read USDC decimals; defaulting to 6');
                 }
             } catch (err) {
                 console.error('Wallet connection error:', err);
-                debug('Connection failed: ' + err.message);
+                debug('Connection failed: ' + err.message, true);  // Show debug on error
                 status('Failed to connect wallet: ' + err.message, 'error');
             }
         }
@@ -1200,7 +1262,7 @@
                     debug('Network switched successfully to: ' + chainId);
                 } catch (e) {
                     console.error('Network switch error:', e);
-                    debug('Network switch failed: ' + e.message);
+                    debug('Network switch failed: ' + e.message, true);  // Show debug on error
                     status('Unable to switch network in wallet.', 'error');
                 }
             };
@@ -1238,7 +1300,7 @@
 
                 if (balance.lt(paymentAmount)) {
                     status(`Insufficient USDC balance. Need ${ethers.utils.formatUnits(paymentAmount, usdcDecimals)} USDC, have ${ethers.utils.formatUnits(balance, usdcDecimals)} USDC`, 'error');
-                    debug('Insufficient USDC balance');
+                    debug('Insufficient USDC balance', true);  // Show debug on error
                     return;
                 }
 
@@ -1272,7 +1334,7 @@
                 debug(`Purchase confirmed in block: ${rcpt.blockNumber}`);
             } catch (err) {
                 console.error('Purchase error:', err);
-                debug('Purchase failed: ' + (err?.data?.message || err?.message || String(err)));
+                debug('Purchase failed: ' + (err?.data?.message || err?.message || String(err)), true);  // Show debug on error
                 status(`Error: ${err?.data?.message || err?.message || String(err)}`, 'error');
             }
         }
@@ -1309,6 +1371,52 @@
                 });
             }
         });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, observerOptions);
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header-nav');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(212, 165, 116, 0.95)';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.background = 'linear-gradient(135deg, #d4a574 0%, #c67c4e 50%, #8b4513 100%)';
+                header.style.backdropFilter = 'none';
+            }
+        });
+
+        // Random hero image (placeholder since we don't have the actual images)
+        function setRandomSculptureImage() {
+            const sculptureElement = document.querySelector('.sculpture-image');
+            if (sculptureElement) {
+                // Using a placeholder pattern since we don't have the actual images
+                const colors = ['#4ecdc4', '#ffd700', '#d4a574', '#c67c4e'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                sculptureElement.style.background = `linear-gradient(45deg, ${randomColor}33, ${randomColor}66)`;
+                sculptureElement.innerHTML = '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; opacity: 0.3;">🏛️</div>';
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', setRandomSculptureImage);
     </script>
