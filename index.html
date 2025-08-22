@@ -822,7 +822,7 @@
         <div class="purchase-card fade-in visible">
             <div style="display:flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
                 <p class="feature-description">A $WHTMRBL token is necessary to participate in the White Marble
-                    Syndicate DAO. This includes voting rights and other privileges.</p>
+                    Syndicate DAO. <br/> This includes voting rights and other privileges.</p>
                 <div>
                     <div class="purchase-label">Price</div>
                     <div style="font-size:1.6rem; color:#4ecdc4;">100 USDC per token</div>
@@ -1093,7 +1093,7 @@
 
         const status = (msg, type = 'info') => {
             const s = $('status');
-            s.style.display = 'block';
+            s.style.display = 'none';  // XXX change to block if debugging
             s.textContent = msg;
             s.className = 'status';
             if (type === 'error') s.classList.add('error');
@@ -1103,7 +1103,7 @@
         const debug = (msg) => {
             const debugInfo = $('debugInfo');
             const debugContent = $('debugContent');
-            debugInfo.style.display = 'block';
+            debugInfo.style.display = 'none';  // XXX change to block if debugging
             debugContent.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + msg + '</div>';
             console.log('DEBUG:', msg);
         };
