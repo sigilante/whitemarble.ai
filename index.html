@@ -726,6 +726,45 @@
         </div>
     </section>
 
+    <section class="cta-section" id="join">
+        <h2 class="section-title fade-in">Join the Syndicate</h2>
+        <p>A $WHTMRBL token is necessary to participate in the White Marble Syndicate DAO.  This includes voting rights and other privileges as outlined in the <a href="blog/posts/bylaws.html">bylaws</a>.</p>
+        <div class="purchase-card fade-in visible">
+            <div style="display:flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <div>
+                    <div class="purchase-label">Price</div>
+                    <div style="font-size:1.6rem; color:#4ecdc4;">100 USDC per token</div>
+                </div>
+                <div>
+                    <button id="connectBtn" class="btn btn-secondary">Connect Wallet</button>
+                </div>
+            </div>
+
+            <div class="purchase-row">
+                <div>
+                    <label class="purchase-label" for="qtyInput">Quantity</label>
+                    <input class="purchase-input" id="qtyInput" type="number" min="1" step="1" value="1">
+                </div>
+                <div>
+                    <div class="purchase-label">Total (USDC)</div>
+                    <div id="totalUsdc" style="font-size:1.3rem; color:#ffd700;">100</div>
+                </div>
+            </div>
+
+            <div style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;">
+                <button id="buyBtn" class="btn btn-primary" disabled="">Approve &amp; Buy</button>
+                <button id="switchBtn" class="btn btn-secondary" style="display:none;"></button>
+            </div>
+
+            <div class="purchase-help">
+                Your wallet will first approve USDC for the White Marble contract, then complete the purchase in a
+                second
+                transaction. Recipient is your connected address.
+            </div>
+            <div id="status" class="status" style="display:none;"></div>
+        </div>
+    </section>
+
     <!-- Blog Preview Section - Add this to your main page -->
     <section class="blog-preview" style="margin: 4rem 0; padding: 3rem 0; border-top: 1px solid #dee2e6;">
         <div class="container" style="max-width: 800px; margin: 0 auto; padding: 0 2rem;">
@@ -744,13 +783,14 @@
                     <h3 class="section-title fade-in">
                         <a href="blog/posts/2025-07-29--launch.html"
                             style="color: inherit; text-decoration: none; transition: color 0.3s ease;"
-                            onmouseover="this.style.color='#495057'" onmouseout="this.style.color='#2c3e50'">Launching White
+                            onmouseover="this.style.color='#495057'" onmouseout="this.style.color='#2c3e50'">Launching
+                            White
                             Marble Syndicate as a DAO</a>
                     </h3>
                     <p>We are pleased to announce the official launch of <a href="https://whitemarble.ai">White Marble
-                        Syndicate</a>, a library DAO for classical studies. WMS will serve as a curated resource
-                    for members to access and utilize the wealth of knowledge stored in material from and about the
-                    classical world of Greece and Rome.</p>
+                            Syndicate</a>, a library DAO for classical studies. WMS will serve as a curated resource
+                        for members to access and utilize the wealth of knowledge stored in material from and about the
+                        classical world of Greece and Rome.</p>
                 </article>
 
                 <!-- Second Post -->
@@ -764,8 +804,9 @@
                             Organizational Theory</a>
                     </h3>
                     <p>Today we are publicly launching the White Marble Syndicate. This is a testbed for concepts we
-                    have explored throughout <a href="https://extelligencer.substack.com/">The Extellıgencer's</a> run, and we have high hopes for its continued
-                    success.</p>
+                        have explored throughout <a href="https://extelligencer.substack.com/">The Extellıgencer's</a>
+                        run, and we have high hopes for its continued
+                        success.</p>
                 </article>
 
                 <!-- Third Post -->
@@ -775,13 +816,16 @@
                     <h3 class="section-title fade-in">
                         <a href="blog/posts/bylaws.html"
                             style="color: inherit; text-decoration: none; transition: color 0.3s ease;"
-                            onmouseover="this.style.color='#495057'" onmouseout="this.style.color='#2c3e50'">Bylaws of the
+                            onmouseover="this.style.color='#495057'" onmouseout="this.style.color='#2c3e50'">Bylaws of
+                            the
                             White Marble Syndicate</a>
                     </h3>
-                    <p>We are pleased to announce the bylaws of the White Marble Syndicate, which outline the structure and governance of our organization. These bylaws are designed to ensure transparency, accountability, and the effective operation of the Syndicate as a library DAO.</p>
+                    <p>We are pleased to announce the bylaws of the White Marble Syndicate, which outline the structure
+                        and governance of our organization. These bylaws are designed to ensure transparency,
+                        accountability, and the effective operation of the Syndicate as a library DAO.</p>
                 </article>
             </div>
-<!-- 
+            <!-- 
             <div class="blog-preview-footer" style="text-align: center; margin-top: 2rem;">
                 <a href="blog/"
                     style="color: #495057; text-decoration: none; font-size: 1rem; padding: 0.75rem 1.5rem; border: 1px solid #dee2e6; border-radius: 4px; transition: all 0.3s ease; display: inline-block; font-family: Georgia, 'Times New Roman', serif;"
@@ -834,12 +878,6 @@
         </div>
     </section>
 
-    <section class="cta-section" id="join">
-        <h2 class="section-title fade-in">Join the Syndicate</h2>
-        <a href="https://portal.whitemarble.ai/apps/fund/project/~pondeg/white-marble-syndicate-membership"
-            class="cta-button fade-in">Become a Member</a>
-    </section>
-
     <footer>
         <div class="footer-content">
             <div class="footer-section">
@@ -849,7 +887,8 @@
             </div>
             <div class="footer-section">
                 <h3>About</h3>
-                <p>A digital automonous organization library dedicated to preserving and enhancing classical Western knowledge.</p>
+                <p>A digital automonous organization library dedicated to preserving and enhancing classical Western
+                    knowledge.</p>
             </div>
         </div>
         <div class="footer-bottom">
