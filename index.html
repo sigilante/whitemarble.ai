@@ -820,8 +820,8 @@
     <section class="cta-section" id="join">
         <h2 class="section-title fade-in">Join the Syndicate</h2>
         <p class="feature-description">A $WHTMRBL token is necessary to participate in the White Marble Syndicate DAO.
-            This includes voting rights
-            and other privileges as outlined in the <a href="blog/posts/bylaws.html">bylaws</a>.</p>
+            This includes voting rights and other privileges.</p>
+        
         <div class="purchase-card fade-in visible">
             <div style="display:flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
                 <div>
@@ -845,16 +845,22 @@
             </div>
 
             <div style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;">
-                <button id="buyBtn" class="btn btn-primary" disabled="">Approve &amp; Buy</button>
+                <button id="buyBtn" class="btn btn-primary" disabled>Approve & Buy</button>
                 <button id="switchBtn" class="btn btn-secondary" style="display:none;"></button>
             </div>
 
             <div class="purchase-help">
                 Your wallet will first approve USDC for the White Marble contract, then complete the purchase in a
-                second
-                transaction. Recipient is your connected address.
+                second transaction. Recipient is your connected address.
             </div>
+            
             <div id="status" class="status" style="display:none;"></div>
+            
+            <!-- Debug Information -->
+            <div id="debugInfo" class="debug-info" style="display:none;">
+                <h4>Debug Information:</h4>
+                <div id="debugContent"></div>
+            </div>
         </div>
     </section>
 
@@ -1059,13 +1065,13 @@
         document.addEventListener('DOMContentLoaded', setRandomSculptureImage);
     </script>
 
-    <!-- Ethers.js UMD -->
+    <!-- Ethers.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <script>
         // -------------------- CONFIG --------------------
         const CONTRACT_ADDRESS = '0xd15f3B7d00502d074257f81F3e9f7ea31e737977';
         const EXPECTED_CHAIN_ID = 1;
-        const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
 
         // Minimal ABI for your contract's function
         const SYNDICATE_ABI = [
@@ -1083,8 +1089,27 @@
         // -------------------- STATE --------------------
         let provider, signer, userAddress, chainId, usdcDecimals = 6;
 
+        // -------------------- HELPER FUNCTIONS --------------------
         const $ = (id) => document.getElementById(id);
-        const status = (msg) => { const s = $('status'); s.style.display = 'block'; s.textContent = msg; };
+        
+        const status = (msg, type = 'info') => { 
+            const s = $('status'); 
+            s.style.display = 'block'; 
+            s.textContent = msg; 
+            s.className = 'status';
+            if (type === 'error') s.classList.add('error');
+            if (type === 'success') s.classList.add('success');
+        };
+
+        const debug = (msg) => {
+            const debugInfo = $('debugInfo');
+            const debugContent = $('debugContent');
+            debugInfo.style.display = 'block';
+            debugContent.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + msg + '</div>';
+            console.log('DEBUG:', msg);
+        };
+
+        const short = (addr) => addr ? addr.slice(0, 6) + '…' + addr.slice(-4) : 'N/A';
 
         // -------------------- UI WIRING --------------------
         const qtyInput = $('qtyInput');
@@ -1100,50 +1125,63 @@
         $('buyBtn').addEventListener('click', handleBuy);
 
         function requireMetaMask() {
+            debug('Checking for MetaMask/Web3 provider...');
             if (!window.ethereum) {
-                alert('No wallet found. Please install MetaMask.');
+                status('No wallet found. Please install MetaMask.', 'error');
+                debug('No window.ethereum found');
                 return false;
             }
+            debug('Web3 provider found: ' + (window.ethereum.isMetaMask ? 'MetaMask' : 'Other'));
             return true;
         }
 
         async function connectWallet() {
             try {
+                debug('Starting wallet connection...');
                 if (!requireMetaMask()) return;
 
+                status('Connecting wallet...');
                 provider = new ethers.providers.Web3Provider(window.ethereum);
+                
+                debug('Requesting account access...');
                 await provider.send('eth_requestAccounts', []);
+                
                 signer = provider.getSigner();
                 userAddress = await signer.getAddress();
+                debug('Connected address: ' + userAddress);
 
                 const network = await provider.getNetwork();
                 chainId = Number(network.chainId);
+                debug('Connected to chain: ' + chainId);
 
                 $('connectBtn').textContent = short(userAddress);
                 $('buyBtn').disabled = false;
 
                 if (EXPECTED_CHAIN_ID && chainId !== Number(EXPECTED_CHAIN_ID)) {
                     showSwitchButton(EXPECTED_CHAIN_ID);
-                    status(`Connected to chain ${chainId}. Please switch to ${EXPECTED_CHAIN_ID}.`);
+                    status(`Connected to chain ${chainId}. Please switch to ${EXPECTED_CHAIN_ID}.`, 'error');
+                    debug('Wrong network detected');
                 } else {
                     $('switchBtn').style.display = 'none';
-                    status(`Connected: ${short(userAddress)} on chain ${chainId}`);
+                    status(`Connected: ${short(userAddress)} on chain ${chainId}`, 'success');
                 }
 
-                // fetch USDC decimals for accurate math
+                // Fetch USDC decimals for accurate math
                 try {
+                    debug('Fetching USDC decimals...');
                     const usdc = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, provider);
                     usdcDecimals = await usdc.decimals();
+                    debug('USDC decimals: ' + usdcDecimals);
                 } catch (e) {
+                    debug('Could not read USDC decimals; defaulting to 6. Error: ' + e.message);
                     console.warn('Could not read USDC decimals; defaulting to 6');
                 }
             } catch (err) {
-                console.error(err);
-                alert(err.message || 'Failed to connect wallet');
+                console.error('Wallet connection error:', err);
+                debug('Connection failed: ' + err.message);
+                status('Failed to connect wallet: ' + err.message, 'error');
             }
         }
-
-        function short(addr) { return addr.slice(0, 6) + '…' + addr.slice(-4); }
 
         function showSwitchButton(targetChainId) {
             const btn = $('switchBtn');
@@ -1151,6 +1189,7 @@
             btn.textContent = `Switch to Chain ${targetChainId}`;
             btn.onclick = async () => {
                 try {
+                    debug('Attempting to switch network...');
                     await window.ethereum.request({
                         method: 'wallet_switchEthereumChain',
                         params: [{ chainId: '0x' + Number(targetChainId).toString(16) }]
@@ -1158,53 +1197,119 @@
                     const network = await provider.getNetwork();
                     chainId = Number(network.chainId);
                     btn.style.display = 'none';
-                    status(`Switched to chain ${chainId}`);
+                    status(`Switched to chain ${chainId}`, 'success');
+                    debug('Network switched successfully to: ' + chainId);
                 } catch (e) {
-                    console.error(e);
-                    status('Unable to switch network in wallet.');
+                    console.error('Network switch error:', e);
+                    debug('Network switch failed: ' + e.message);
+                    status('Unable to switch network in wallet.', 'error');
                 }
             };
         }
 
         async function handleBuy() {
             try {
-                if (!signer) return connectWallet();
+                debug('Starting purchase process...');
+                
+                if (!signer) {
+                    debug('No signer, attempting to connect wallet...');
+                    return connectWallet();
+                }
+                
                 if (EXPECTED_CHAIN_ID && chainId !== Number(EXPECTED_CHAIN_ID)) {
-                    status('Wrong network. Please switch and try again.');
+                    status('Wrong network. Please switch and try again.', 'error');
+                    debug('Purchase blocked due to wrong network');
                     return;
                 }
+                
                 if (!USDC_ADDRESS || USDC_ADDRESS.startsWith('REPLACE_')) {
-                    alert('USDC address is not configured. Please set USDC_ADDRESS in the script.');
+                    status('USDC address is not configured. Please contact support.', 'error');
+                    debug('USDC address not configured');
                     return;
                 }
 
                 const quantity = Math.max(1, parseInt(qtyInput.value || '1', 10));
                 const paymentAmount = ethers.BigNumber.from(10).pow(usdcDecimals).mul(100).mul(quantity); // 100 USDC per token
+                debug(`Purchase details: ${quantity} tokens, ${paymentAmount.toString()} USDC wei`);
 
+                // Check USDC balance
                 const usdc = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, signer);
-                const current = await usdc.allowance(userAddress, CONTRACT_ADDRESS);
-
-                if (current.lt(paymentAmount)) {
-                    status(`Approving USDC…`);
-                    const tx1 = await usdc.approve(CONTRACT_ADDRESS, paymentAmount);
-                    status(`Approval tx sent: ${tx1.hash}\nWaiting for confirmation…`);
-                    await tx1.wait();
-                    status(`Approval confirmed.`);
-                } else {
-                    status(`Sufficient allowance detected.`);
+                const balance = await usdc.balanceOf(userAddress);
+                debug(`User USDC balance: ${balance.toString()}`);
+                
+                if (balance.lt(paymentAmount)) {
+                    status(`Insufficient USDC balance. Need ${ethers.utils.formatUnits(paymentAmount, usdcDecimals)} USDC, have ${ethers.utils.formatUnits(balance, usdcDecimals)} USDC`, 'error');
+                    debug('Insufficient USDC balance');
+                    return;
                 }
 
+                // Check allowance
+                const current = await usdc.allowance(userAddress, CONTRACT_ADDRESS);
+                debug(`Current allowance: ${current.toString()}`);
+
+                if (current.lt(paymentAmount)) {
+                    status(`Approving USDC spend...`);
+                    debug('Sending approval transaction...');
+                    const tx1 = await usdc.approve(CONTRACT_ADDRESS, paymentAmount);
+                    status(`Approval tx sent: ${tx1.hash}\nWaiting for confirmation...`);
+                    debug(`Approval tx hash: ${tx1.hash}`);
+                    await tx1.wait();
+                    status(`Approval confirmed.`, 'success');
+                    debug('Approval transaction confirmed');
+                } else {
+                    status(`Sufficient allowance detected.`);
+                    debug('Sufficient allowance already exists');
+                }
+
+                // Execute purchase
                 const synd = new ethers.Contract(CONTRACT_ADDRESS, SYNDICATE_ABI, signer);
-                status(`Purchasing ${quantity} token(s)…`);
+                status(`Purchasing ${quantity} token(s)...`);
+                debug('Sending purchase transaction...');
                 const tx2 = await synd.buySyndicateToken(userAddress, paymentAmount, { value: 0 });
-                status(`Purchase tx sent: ${tx2.hash}\nWaiting for confirmation…`);
+                status(`Purchase tx sent: ${tx2.hash}\nWaiting for confirmation...`);
+                debug(`Purchase tx hash: ${tx2.hash}`);
                 const rcpt = await tx2.wait();
-                status(`Success! Tx confirmed in block ${rcpt.blockNumber}.`);
+                status(`Success! Tx confirmed in block ${rcpt.blockNumber}.`, 'success');
+                debug(`Purchase confirmed in block: ${rcpt.blockNumber}`);
             } catch (err) {
-                console.error(err);
-                status(`Error: ${err?.data?.message || err?.message || String(err)}`);
+                console.error('Purchase error:', err);
+                debug('Purchase failed: ' + (err?.data?.message || err?.message || String(err)));
+                status(`Error: ${err?.data?.message || err?.message || String(err)}`, 'error');
             }
         }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            debug('Page loaded, initializing...');
+            
+            // Check if wallet is already connected
+            if (window.ethereum && window.ethereum.selectedAddress) {
+                debug('Wallet already connected, attempting auto-connect...');
+                connectWallet();
+            }
+            
+            // Listen for account changes
+            if (window.ethereum) {
+                window.ethereum.on('accountsChanged', (accounts) => {
+                    debug('Accounts changed: ' + accounts.join(', '));
+                    if (accounts.length === 0) {
+                        // User disconnected
+                        $('connectBtn').textContent = 'Connect Wallet';
+                        $('buyBtn').disabled = true;
+                        status('Wallet disconnected', 'error');
+                    } else {
+                        // User switched accounts
+                        connectWallet();
+                    }
+                });
+
+                window.ethereum.on('chainChanged', (chainId) => {
+                    debug('Chain changed to: ' + parseInt(chainId, 16));
+                    // Reload the page to reset state
+                    window.location.reload();
+                });
+            }
+        });
 
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1222,7 +1327,9 @@
         // Scroll animations
         const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            entries.forEach(entry => { 
+                if (entry.isIntersecting) entry.target.classList.add('visible'); 
+            });
         }, observerOptions);
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
@@ -1238,19 +1345,16 @@
             }
         });
 
-        // Random hero image
-        const sculptureImages = [
-            'img/hero-nike.jpeg',
-            'img/hero-aphaia-blank.png',
-            'img/hero-belvedere-blank.png',
-            'img/hero-doryphoros.webp',
-        ];
-
+        // Random hero image (placeholder since we don't have the actual images)
         function setRandomSculptureImage() {
-            const randomIndex = Math.floor(Math.random() * sculptureImages.length);
-            const randomImage = sculptureImages[randomIndex];
             const sculptureElement = document.querySelector('.sculpture-image');
-            if (sculptureElement) sculptureElement.style.backgroundImage = `url('${randomImage}')`;
+            if (sculptureElement) {
+                // Using a placeholder pattern since we don't have the actual images
+                const colors = ['#4ecdc4', '#ffd700', '#d4a574', '#c67c4e'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                sculptureElement.style.background = `linear-gradient(45deg, ${randomColor}33, ${randomColor}66)`;
+                sculptureElement.innerHTML = '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; opacity: 0.3;">🏛️</div>';
+            }
         }
 
         document.addEventListener('DOMContentLoaded', setRandomSculptureImage);
