@@ -819,11 +819,10 @@
 
     <section class="cta-section" id="join">
         <h2 class="section-title fade-in">Join the Syndicate</h2>
-        <p class="feature-description">A $WHTMRBL token is necessary to participate in the White Marble Syndicate DAO.
-            This includes voting rights and other privileges.</p>
-        
         <div class="purchase-card fade-in visible">
             <div style="display:flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <p class="feature-description">A $WHTMRBL token is necessary to participate in the White Marble
+                    Syndicate DAO. This includes voting rights and other privileges.</p>
                 <div>
                     <div class="purchase-label">Price</div>
                     <div style="font-size:1.6rem; color:#4ecdc4;">100 USDC per token</div>
@@ -853,14 +852,14 @@
                 Your wallet will first approve USDC for the White Marble contract, then complete the purchase in a
                 second transaction. Recipient is your connected address.
             </div>
-            
+
             <div id="status" class="status" style="display:none;"></div>
-            
+
             <!-- Debug Information -->
-            <div id="debugInfo" class="debug-info" style="display:none;">
+            <!-- <div id="debugInfo" class="debug-info" style="display:none;">
                 <h4>Debug Information:</h4>
                 <div id="debugContent"></div>
-            </div>
+            </div> -->
         </div>
     </section>
 
@@ -1069,9 +1068,9 @@
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <script>
         // -------------------- CONFIG --------------------
-        const CONTRACT_ADDRESS = '0xd15f3B7d00502d074257f81F3e9f7ea31e737977';
+        const CONTRACT_ADDRESS = '0xd15f3B7d00502d074257f81F3e9f7ea31e737977';  // $WHTMRBL contract address
         const EXPECTED_CHAIN_ID = 1;
-        const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
+        const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';      // Mainnet USDC address
 
         // Minimal ABI for your contract's function
         const SYNDICATE_ABI = [
@@ -1091,11 +1090,11 @@
 
         // -------------------- HELPER FUNCTIONS --------------------
         const $ = (id) => document.getElementById(id);
-        
-        const status = (msg, type = 'info') => { 
-            const s = $('status'); 
-            s.style.display = 'block'; 
-            s.textContent = msg; 
+
+        const status = (msg, type = 'info') => {
+            const s = $('status');
+            s.style.display = 'block';
+            s.textContent = msg;
             s.className = 'status';
             if (type === 'error') s.classList.add('error');
             if (type === 'success') s.classList.add('success');
@@ -1142,10 +1141,10 @@
 
                 status('Connecting wallet...');
                 provider = new ethers.providers.Web3Provider(window.ethereum);
-                
+
                 debug('Requesting account access...');
                 await provider.send('eth_requestAccounts', []);
-                
+
                 signer = provider.getSigner();
                 userAddress = await signer.getAddress();
                 debug('Connected address: ' + userAddress);
@@ -1210,18 +1209,18 @@
         async function handleBuy() {
             try {
                 debug('Starting purchase process...');
-                
+
                 if (!signer) {
                     debug('No signer, attempting to connect wallet...');
                     return connectWallet();
                 }
-                
+
                 if (EXPECTED_CHAIN_ID && chainId !== Number(EXPECTED_CHAIN_ID)) {
                     status('Wrong network. Please switch and try again.', 'error');
                     debug('Purchase blocked due to wrong network');
                     return;
                 }
-                
+
                 if (!USDC_ADDRESS || USDC_ADDRESS.startsWith('REPLACE_')) {
                     status('USDC address is not configured. Please contact support.', 'error');
                     debug('USDC address not configured');
@@ -1236,7 +1235,7 @@
                 const usdc = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, signer);
                 const balance = await usdc.balanceOf(userAddress);
                 debug(`User USDC balance: ${balance.toString()}`);
-                
+
                 if (balance.lt(paymentAmount)) {
                     status(`Insufficient USDC balance. Need ${ethers.utils.formatUnits(paymentAmount, usdcDecimals)} USDC, have ${ethers.utils.formatUnits(balance, usdcDecimals)} USDC`, 'error');
                     debug('Insufficient USDC balance');
@@ -1281,13 +1280,13 @@
         // Initialize on page load
         window.addEventListener('load', () => {
             debug('Page loaded, initializing...');
-            
+
             // Check if wallet is already connected
             if (window.ethereum && window.ethereum.selectedAddress) {
                 debug('Wallet already connected, attempting auto-connect...');
                 connectWallet();
             }
-            
+
             // Listen for account changes
             if (window.ethereum) {
                 window.ethereum.on('accountsChanged', (accounts) => {
