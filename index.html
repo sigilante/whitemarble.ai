@@ -643,6 +643,97 @@
                 padding: 1.25rem !important;
             }
         }
+
+        /* --- Web3 purchase UI --- */
+        .purchase-card {
+            max-width: 720px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #111 0%, #1c1c1c 100%);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 10px 40px rgba(78, 205, 196, 0.08);
+        }
+
+        .purchase-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            align-items: end;
+            margin-top: 16px;
+        }
+
+        .purchase-label {
+            color: #d4a574;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .purchase-input {
+            width: 100%;
+            background: #0e0e0e;
+            border: 1px solid #2b2b2b;
+            color: #fff;
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 1.1rem;
+            outline: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            border: 0;
+            border-radius: 999px;
+            padding: 14px 22px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.15s ease, box-shadow 0.3s ease;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: #000;
+            box-shadow: 0 10px 30px rgba(78, 205, 196, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 34px rgba(78, 205, 196, 0.35);
+        }
+
+        .btn-secondary {
+            background: rgba(212, 165, 116, 0.1);
+            color: #d4a574;
+            border: 1px solid rgba(212, 165, 116, 0.4);
+        }
+
+        .purchase-help {
+            color: #9aa4aa;
+            font-size: 0.95rem;
+            margin-top: 12px;
+            line-height: 1.6;
+        }
+
+        .status {
+            margin-top: 16px;
+            padding: 12px 14px;
+            border: 1px dashed #2a6f6a;
+            color: #cfe9e7;
+            background: rgba(78, 205, 196, 0.06);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 
@@ -728,7 +819,8 @@
 
     <section class="cta-section" id="join">
         <h2 class="section-title fade-in">Join the Syndicate</h2>
-        <p>A $WHTMRBL token is necessary to participate in the White Marble Syndicate DAO.  This includes voting rights and other privileges as outlined in the <a href="blog/posts/bylaws.html">bylaws</a>.</p>
+        <p>A $WHTMRBL token is necessary to participate in the White Marble Syndicate DAO. This includes voting rights
+            and other privileges as outlined in the <a href="blog/posts/bylaws.html">bylaws</a>.</p>
         <div class="purchase-card fade-in visible">
             <div style="display:flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
                 <div>
@@ -963,6 +1055,200 @@
         }
 
         // Call the function when page loads
+        document.addEventListener('DOMContentLoaded', setRandomSculptureImage);
+    </script>
+    <script>
+        // -------------------- CONFIG --------------------
+        const CONTRACT_ADDRESS = '0xd15f3B7d00502d074257f81F3e9f7ea31e737977';
+        const EXPECTED_CHAIN_ID = 1;
+        const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+
+        // Minimal ABI for your contract's function
+        const SYNDICATE_ABI = [
+            "function buySyndicateToken(address recipient, uint256 paymentAmount) external payable returns (uint256)"
+        ];
+
+        // Minimal ERC-20 ABI
+        const ERC20_ABI = [
+            "function approve(address spender, uint256 amount) external returns (bool)",
+            "function allowance(address owner, address spender) external view returns (uint256)",
+            "function decimals() external view returns (uint8)",
+            "function balanceOf(address) external view returns (uint256)"
+        ];
+
+        // -------------------- STATE --------------------
+        let provider, signer, userAddress, chainId, usdcDecimals = 6;
+
+        const $ = (id) => document.getElementById(id);
+        const status = (msg) => { const s = $('status'); s.style.display = 'block'; s.textContent = msg; };
+
+        // -------------------- UI WIRING --------------------
+        const qtyInput = $('qtyInput');
+        const totalUsdc = $('totalUsdc');
+
+        qtyInput.addEventListener('input', () => {
+            const q = Math.max(1, parseInt(qtyInput.value || '1', 10));
+            qtyInput.value = q;
+            totalUsdc.textContent = String(q * 100);
+        });
+
+        $('connectBtn').addEventListener('click', connectWallet);
+        $('buyBtn').addEventListener('click', handleBuy);
+
+        function requireMetaMask() {
+            if (!window.ethereum) {
+                alert('No wallet found. Please install MetaMask.');
+                return false;
+            }
+            return true;
+        }
+
+        async function connectWallet() {
+            try {
+                if (!requireMetaMask()) return;
+
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                signer = provider.getSigner();
+                userAddress = await signer.getAddress();
+
+                const network = await provider.getNetwork();
+                chainId = Number(network.chainId);
+
+                $('connectBtn').textContent = short(userAddress);
+                $('buyBtn').disabled = false;
+
+                if (EXPECTED_CHAIN_ID && chainId !== Number(EXPECTED_CHAIN_ID)) {
+                    showSwitchButton(EXPECTED_CHAIN_ID);
+                    status(`Connected to chain ${chainId}. Please switch to ${EXPECTED_CHAIN_ID}.`);
+                } else {
+                    $('switchBtn').style.display = 'none';
+                    status(`Connected: ${short(userAddress)} on chain ${chainId}`);
+                }
+
+                // fetch USDC decimals for accurate math
+                try {
+                    const usdc = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, provider);
+                    usdcDecimals = await usdc.decimals();
+                } catch (e) {
+                    console.warn('Could not read USDC decimals; defaulting to 6');
+                }
+            } catch (err) {
+                console.error(err);
+                alert(err.message || 'Failed to connect wallet');
+            }
+        }
+
+        function short(addr) { return addr.slice(0, 6) + '…' + addr.slice(-4); }
+
+        function showSwitchButton(targetChainId) {
+            const btn = $('switchBtn');
+            btn.style.display = 'inline-flex';
+            btn.textContent = `Switch to Chain ${targetChainId}`;
+            btn.onclick = async () => {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: '0x' + Number(targetChainId).toString(16) }]
+                    });
+                    const network = await provider.getNetwork();
+                    chainId = Number(network.chainId);
+                    btn.style.display = 'none';
+                    status(`Switched to chain ${chainId}`);
+                } catch (e) {
+                    console.error(e);
+                    status('Unable to switch network in wallet.');
+                }
+            };
+        }
+
+        async function handleBuy() {
+            try {
+                if (!signer) return connectWallet();
+                if (EXPECTED_CHAIN_ID && chainId !== Number(EXPECTED_CHAIN_ID)) {
+                    status('Wrong network. Please switch and try again.');
+                    return;
+                }
+                if (!USDC_ADDRESS || USDC_ADDRESS.startsWith('REPLACE_')) {
+                    alert('USDC address is not configured. Please set USDC_ADDRESS in the script.');
+                    return;
+                }
+
+                const quantity = Math.max(1, parseInt(qtyInput.value || '1', 10));
+                const paymentAmount = ethers.BigNumber.from(10).pow(usdcDecimals).mul(100).mul(quantity); // 100 USDC per token
+
+                const usdc = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, signer);
+                const current = await usdc.allowance(userAddress, CONTRACT_ADDRESS);
+
+                if (current.lt(paymentAmount)) {
+                    status(`Approving USDC…`);
+                    const tx1 = await usdc.approve(CONTRACT_ADDRESS, paymentAmount);
+                    status(`Approval tx sent: ${tx1.hash}\nWaiting for confirmation…`);
+                    await tx1.wait();
+                    status(`Approval confirmed.`);
+                } else {
+                    status(`Sufficient allowance detected.`);
+                }
+
+                const synd = new ethers.Contract(CONTRACT_ADDRESS, SYNDICATE_ABI, signer);
+                status(`Purchasing ${quantity} token(s)…`);
+                const tx2 = await synd.buySyndicateToken(userAddress, paymentAmount, { value: 0 });
+                status(`Purchase tx sent: ${tx2.hash}\nWaiting for confirmation…`);
+                const rcpt = await tx2.wait();
+                status(`Success! Tx confirmed in block ${rcpt.blockNumber}.`);
+            } catch (err) {
+                console.error(err);
+                status(`Error: ${err?.data?.message || err?.message || String(err)}`);
+            }
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, observerOptions);
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header-nav');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(212, 165, 116, 0.95)';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.background = 'linear-gradient(135deg, #d4a574 0%, #c67c4e 50%, #8b4513 100%)';
+                header.style.backdropFilter = 'none';
+            }
+        });
+
+        // Random hero image
+        const sculptureImages = [
+            'img/hero-nike.jpeg',
+            'img/hero-aphaia-blank.png',
+            'img/hero-belvedere-blank.png',
+            'img/hero-doryphoros.webp',
+        ];
+
+        function setRandomSculptureImage() {
+            const randomIndex = Math.floor(Math.random() * sculptureImages.length);
+            const randomImage = sculptureImages[randomIndex];
+            const sculptureElement = document.querySelector('.sculpture-image');
+            if (sculptureElement) sculptureElement.style.backgroundImage = `url('${randomImage}')`;
+        }
+
         document.addEventListener('DOMContentLoaded', setRandomSculptureImage);
     </script>
 </body>
